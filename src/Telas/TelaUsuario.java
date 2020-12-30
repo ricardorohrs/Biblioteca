@@ -54,6 +54,7 @@ public class TelaUsuario extends javax.swing.JFrame {
                 table1.setModel(modelo);
             }
         });
+
         minhasReservasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,8 +63,10 @@ public class TelaUsuario extends javax.swing.JFrame {
                 telaReserva.atualizaTabela();
                 telaReserva.setLocationRelativeTo(null);
                 telaReserva.setVisible(true);
+                telaReserva.setResizable(false);
             }
         });
+
         meusEmprestimos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,6 +75,7 @@ public class TelaUsuario extends javax.swing.JFrame {
                 telaEmprestimo.atualizaTabela();
                 telaEmprestimo.setLocationRelativeTo(null);
                 telaEmprestimo.setVisible(true);
+                telaEmprestimo.setResizable(false);
             }
         });
 

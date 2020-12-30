@@ -14,5 +14,6 @@ public class Biblioteca {
         tela = new TelaInicial();
         tela.setLocationRelativeTo(null);
         tela.setVisible(true);
+        tela.setResizable(false);
     }
 }

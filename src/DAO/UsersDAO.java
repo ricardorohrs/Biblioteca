@@ -107,29 +107,6 @@ public class UsersDAO {
         return u;
     }
 
-    public Usuario readByParteNome(String nome){
-        Usuario u = new Usuario();
-        try {
-            Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM users WHERE nome LIKE '%" + nome + "%'");;
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                u.setLogin(rs.getString("login"));
-                u.setCargo(rs.getInt("cargo"));
-                u.setNome(rs.getString("nome"));
-                u.setReservas(rs.getInt("reservas"));
-                u.setSenha(rs.getString("senha"));
-            }
-            ps.close();
-            rs.close();
-            con.close();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return u;
-    }
-
     public void delete(Usuario u){
         Connection con;
         try {

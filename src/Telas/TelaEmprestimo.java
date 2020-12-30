@@ -32,7 +32,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         modelo.addColumn("Devolucao");
 
         ArrayList<Emprestimo> emprestimos = new ArrayList<>();
-       // zzemprestimos = ed.readAll(usuariologado.getLogin());
+       // emprestimos = ed.readAll(usuariologado.getLogin());
         if(emprestimos.isEmpty()){
             modelo.addRow(new String[]{"-","-","-","-"});
         }else{

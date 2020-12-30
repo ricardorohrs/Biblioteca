@@ -54,12 +54,14 @@ public class TelaInicial extends javax.swing.JFrame {
             TelaUsuario telaUser = new TelaUsuario();
             telaUser.setLocationRelativeTo(null);
             telaUser.setVisible(true);
+            telaUser.setResizable(false);
             //telaUser.usuarioLogado(user);
             //telaUser.atualizaMultas();
         } else if (userField.getText().equals("admin")) {
             TelaAdmin telaAdmin = new TelaAdmin();
             telaAdmin.setLocationRelativeTo(null);
             telaAdmin.setVisible(true);
+            telaAdmin.setResizable(false);
         } else
             JOptionPane.showMessageDialog(null, "Usuário inválido!");
     }

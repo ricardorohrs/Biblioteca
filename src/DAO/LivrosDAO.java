@@ -90,35 +90,6 @@ public class LivrosDAO{
         return t;
     }
 
-    public Livro readbyEditora(String Editora){
-        Livro t = new Livro();
-        Connection con;
-        try {
-            con = ConnectionFactory.getConnection();
-
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM livros WHERE editora = ?");
-            ps.setString(1, Editora);
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()){
-                t.setID(rs.getInt("ID"));
-                t.setISBN(rs.getInt("ISBN"));
-                t.setAutor(rs.getString("autor"));
-                t.setEdicao(rs.getInt("edicao"));
-                t.setNome(rs.getString("nome"));
-                t.setEditora(rs.getString("editora"));
-                t.setAno(rs.getInt("ano"));
-            }
-            rs.close();
-            ps.close();
-            con.close();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return t;
-    }
-
     public void update(Livro t) {
         Connection con;
         try {

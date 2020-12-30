@@ -92,6 +92,7 @@ public class TelaAdmin extends javax.swing.JFrame {
         //addLivros.passaUser(usuariologado);
         addLivros.setLocationRelativeTo(null);
         addLivros.setVisible(true);
+        addLivros.setResizable(false);
     }
 
     private void abreTelaAdicionaUsuario() {
@@ -99,6 +100,7 @@ public class TelaAdmin extends javax.swing.JFrame {
         //addUsers.passaUser(usuariologado);
         addUsers.setLocationRelativeTo(null);
         addUsers.setVisible(true);
+        addUsers.setResizable(false);
     }
 
     private void excluiUsuario() {
@@ -127,6 +129,7 @@ public class TelaAdmin extends javax.swing.JFrame {
         //addLivros.passaUser(usuariologado);
         editLivros.setLocationRelativeTo(null);
         editLivros.setVisible(true);
+        editLivros.setResizable(false);
     }
 
     private void abreTelaEditaUsuario() {
@@ -135,6 +138,7 @@ public class TelaAdmin extends javax.swing.JFrame {
         //addLivros.passaUser(usuariologado);
         editUser.setLocationRelativeTo(null);
         editUser.setVisible(true);
+        editUser.setResizable(false);
     }
 
 }

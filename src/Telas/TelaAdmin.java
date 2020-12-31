@@ -26,7 +26,7 @@ public class TelaAdmin extends javax.swing.JFrame {
     public TelaAdmin() {
         add(admin);
         setTitle("Administrador - UFSM");
-        setSize(550, 700);
+        setSize(700, 700);
 
         atualizaTabelaLivros();
         atualizaTabelaUsuarios();
@@ -51,15 +51,16 @@ public class TelaAdmin extends javax.swing.JFrame {
         listaUsers.addColumn("cargo");
         listaUsers.addColumn("reservas");
         listaUsers.addColumn("multa");
-        ArrayList<Usuario> usuarios = new ArrayList<>();
+        ArrayList<Usuario> usuarios;
         UsersDAO ud = new UsersDAO();
         usuarios = ud.listarUsers();
+
 
         if (usuarios.isEmpty())
             listaUsers.addRow(new String[]{"-", "-", "-", "-", "-"});
         else {
             for (Usuario users: usuarios) {
-                listaUsers.addRow(new String[]{""+users.getLogin(),""+users.getNome(),""+users.getCargo(),""+users.getReservas(),""+users.getMulta(),""+users.getNome()});
+                listaUsers.addRow(new String[]{""+users.getLogin(),""+users.getNome(),""+users.getCargo(),""+users.getReservas(),""+users.getMulta()});
             }
         }
         table5.setModel(listaUsers);
@@ -67,6 +68,7 @@ public class TelaAdmin extends javax.swing.JFrame {
 
     public void atualizaTabelaLivros() {
         DefaultTableModel listaLivros = new DefaultTableModel();
+        listaLivros.addColumn("ID");
         listaLivros.addColumn("ISBN");
         listaLivros.addColumn("Nome");
         listaLivros.addColumn("Autor");
@@ -82,14 +84,13 @@ public class TelaAdmin extends javax.swing.JFrame {
             listaLivros.addRow(new String[]{"-","-","-","-","-","-","-","-"});
         else {
             for (Livro livro : livros)
-                listaLivros.addRow(new String[]{""+livro.getISBN(),""+livro.getNome(),""+livro.getAutor(),""+livro.getEdicao(),""+livro.getEditora(),""+livro.getAno(),""+livro.getReservado(),""+livro.getEmprestado()});
+                listaLivros.addRow(new String[]{""+livro.getID(), ""+livro.getISBN(),""+livro.getNome(),""+livro.getAutor(),""+livro.getEdicao(),""+livro.getEditora(),""+livro.getAno(),""+livro.getReservado(),""+livro.getEmprestado()});
         }
         table4.setModel(listaLivros);
     }
 
     private void abreTelaAdicionaLivro() {
         TelaAddLivros addLivros = new TelaAddLivros(this);
-        //addLivros.passaUser(usuariologado);
         addLivros.setLocationRelativeTo(null);
         addLivros.setVisible(true);
         addLivros.setResizable(false);
@@ -97,7 +98,6 @@ public class TelaAdmin extends javax.swing.JFrame {
 
     private void abreTelaAdicionaUsuario() {
         TelaAddUsers addUsers = new TelaAddUsers(this);
-        //addUsers.passaUser(usuariologado);
         addUsers.setLocationRelativeTo(null);
         addUsers.setVisible(true);
         addUsers.setResizable(false);
@@ -126,7 +126,6 @@ public class TelaAdmin extends javax.swing.JFrame {
     private void abreTelaEditaLivros() {
         int isbn = Integer.parseInt(String.valueOf(table4.getValueAt(table4.getSelectedRow(), 1)));
         TelaEditLivro editLivros = new TelaEditLivro(this, isbn);
-        //addLivros.passaUser(usuariologado);
         editLivros.setLocationRelativeTo(null);
         editLivros.setVisible(true);
         editLivros.setResizable(false);
@@ -135,10 +134,8 @@ public class TelaAdmin extends javax.swing.JFrame {
     private void abreTelaEditaUsuario() {
         String login = String.valueOf(table5.getValueAt(table5.getSelectedRow(), 0));
         TelaEditUser editUser = new TelaEditUser(this, login);
-        //addLivros.passaUser(usuariologado);
         editUser.setLocationRelativeTo(null);
         editUser.setVisible(true);
         editUser.setResizable(false);
     }
-
 }

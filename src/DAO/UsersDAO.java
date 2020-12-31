@@ -148,11 +148,25 @@ public class UsersDAO {
 
     }
 
-    public void updateReservas(Usuario u, int num){
+    public void addReservas(Usuario u){
         try {
             Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("UPDATE users SET reservas = ? WHERE login = ?");
-            ps.setInt(1, u.getReservas() + num);
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET reservas = ? WHERE login = ?");
+            ps.setInt(1, u.getReservas() + 1);
+            ps.setString(2, u.getLogin());
+            ps.execute();
+            ps.close();
+            con.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void deletaReservas(Usuario u){
+        try {
+            Connection con = ConnectionFactory.getConnection();
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET reservas = ? WHERE login = ?");
+            ps.setInt(1, u.getReservas() - 1);
             ps.setString(2, u.getLogin());
             ps.execute();
             ps.close();
@@ -165,7 +179,7 @@ public class UsersDAO {
     public void updateMultas(Usuario u, int multa){
         try{
             Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("UPDATE users SET multa = ? WHERE login = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET multa = ? WHERE login = ?");
             ps.setInt(1, u.getMulta() + multa);
             ps.setString(2, u.getLogin());
             ps.execute();

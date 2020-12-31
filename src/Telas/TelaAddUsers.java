@@ -4,8 +4,6 @@ import DAO.UsersDAO;
 import model.Usuario;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class TelaAddUsers extends javax.swing.JFrame {
     private JPanel addUsers;
@@ -24,23 +22,20 @@ public class TelaAddUsers extends javax.swing.JFrame {
         setTitle("Adicionar Usuário - UFSM");
         setSize(290, 320);
 
-        adicionarUsuárioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UsersDAO u = new UsersDAO();
-                Usuario user = new Usuario();
+        adicionarUsuárioButton.addActionListener(e -> {
+            UsersDAO u = new UsersDAO();
+            Usuario user = new Usuario();
 
-                user.setNome(nome.getText());
-                user.setLogin(login.getText());
-                user.setSenha(senha.getText());
-                user.setReservas(Integer.parseInt(reservas.getText()));
-                user.setMulta(Integer.parseInt(multas.getText()));
-                user.setCargo(comboBox1.getSelectedIndex() + 1);
+            user.setNome(nome.getText());
+            user.setLogin(login.getText());
+            user.setSenha(senha.getText());
+            user.setReservas(Integer.parseInt(reservas.getText()));
+            user.setMulta(Integer.parseInt(multas.getText()));
+            user.setCargo(comboBox1.getSelectedIndex() + 1);
 
-                u.create(user);
-                telaAdmin.atualizaTabelaUsuarios();
-                JOptionPane.showMessageDialog(null, "Usuário adicionado!");
-            }
+            u.create(user);
+            telaAdmin.atualizaTabelaUsuarios();
+            JOptionPane.showMessageDialog(null, "Usuário adicionado!");
         });
 
         sairButton.addActionListener(e -> dispose());

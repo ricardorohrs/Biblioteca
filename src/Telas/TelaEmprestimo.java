@@ -2,6 +2,7 @@ package Telas;
 
 import DAO.EmprestimoDAO;
 import model.Emprestimo;
+import model.Usuario;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -14,11 +15,16 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     private JButton voltarButton;
     private JButton renovarButton;
     private JPanel emprestimo;
+    private Usuario usuariologado;
 
-    public TelaEmprestimo() {
+    public void passaUser(Usuario user){
+        usuariologado = user;
+    }
+
+    public TelaEmprestimo(Usuario user) {
         add(emprestimo);
         setSize(500, 400);
-        setTitle("Meus Emprestimos - UFSM ");
+        setTitle("Meus Emprestimos - " + user.getNome() + " - UFSM");
 
         voltarButton.addActionListener(e -> dispose());
     }
@@ -27,18 +33,17 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         EmprestimoDAO ed = new EmprestimoDAO();
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID Emprestimo");
-        modelo.addColumn("ID");
+        modelo.addColumn("ID Livro");
+        modelo.addColumn("Nome");
         modelo.addColumn("Retirado");
         modelo.addColumn("Devolucao");
 
-        ArrayList<Emprestimo> emprestimos = new ArrayList<>();
-       // emprestimos = ed.readAll(usuariologado.getLogin());
-        if(emprestimos.isEmpty()){
+        ArrayList<Emprestimo> emprestimos = ed.readAll(usuariologado.getLogin());
+        if (emprestimos.isEmpty())
             modelo.addRow(new String[]{"-","-","-","-"});
-        }else{
-            for (Emprestimo emprestimo : emprestimos) {
+        else {
+            for (Emprestimo emprestimo : emprestimos)
                 modelo.addRow(new String[]{""+emprestimo.getIDEmprestimo(),""+emprestimo.getID_livro(),""+emprestimo.getRetirado(),""+emprestimo.getDevolucao()});
-            }
         }
         table3.setModel(modelo);
     }

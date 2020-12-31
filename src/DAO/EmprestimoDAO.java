@@ -61,7 +61,7 @@ public class EmprestimoDAO {
         Connection con;
         try {
             con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM emprestimos WHERE id_emprest = ?");
+            PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM emprestimos WHERE id_emprestimo = ?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
@@ -85,7 +85,7 @@ public class EmprestimoDAO {
         Connection con;
         try {
             con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("DELETE FROM emprestimos WHERE id_emprest = ?");
+            PreparedStatement ps = (PreparedStatement) con.prepareStatement("DELETE FROM emprestimos WHERE id_emprestimo = ?");
             ps.setInt(1, t.getIDEmprestimo());
             ps.execute();
             ps.close();
@@ -103,16 +103,16 @@ public class EmprestimoDAO {
             Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM emprestimos WHERE usuario = ?");
             ps.setString(1,login);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                Emprestimo temp = new Emprestimo();
-                temp.setIDEmprestimo(rs.getInt("id_emprest"));
-                temp.setID_livro(rs.getInt("livro"));
-                temp.setDevolucao(rs.getDate("devolucao"));
-                temp.setRetirado(rs.getDate("retirado"));
-                emprestimos.add(temp);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Emprestimo temp = new Emprestimo();
+                    temp.setIDEmprestimo(rs.getInt("id_emprest"));
+                    temp.setID_livro(rs.getInt("livro"));
+                    temp.setDevolucao(rs.getDate("devolucao"));
+                    temp.setRetirado(rs.getDate("retirado"));
+                }
+                rs.close();
             }
-            rs.close();
             con.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(EmprestimoDAO.class.getName()).log(Level.SEVERE, null, ex);

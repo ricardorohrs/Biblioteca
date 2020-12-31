@@ -128,7 +128,7 @@ public class LivrosDAO{
     public void marcarReserva(int ID, int res){
         try{
             Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("UPDATE livros SET reservado = ? WHERE ID = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE livros SET reservado = ? WHERE ID = ?");
             ps.setInt(1,res);
             ps.setInt(2,ID);
             ps.execute();
@@ -144,7 +144,7 @@ public class LivrosDAO{
         try {
             con = ConnectionFactory.getConnection();
 
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("DELETE from livros WHERE ID = ?");
+            PreparedStatement ps = con.prepareStatement("DELETE from livros WHERE ID = ?");
             ps.setInt(1, t.getID());
             ps.execute();
             ps.close();
@@ -159,7 +159,7 @@ public class LivrosDAO{
         ArrayList<Livro> livros = new ArrayList<>();
         try {
             Connection con = ConnectionFactory.getConnection();
-            Statement s = (Statement) con.createStatement();
+            Statement s = con.createStatement();
             String sql = ("SELECT * FROM livros WHERE nome LIKE '%" + parteNome + "%'");
             ResultSet rs = s.executeQuery(sql);
             while(rs.next()){
@@ -188,7 +188,7 @@ public class LivrosDAO{
         ArrayList<Livro> livros = new ArrayList<>();
         try {
             Connection con = ConnectionFactory.getConnection();
-            Statement s = (Statement) con.createStatement();
+            Statement s = con.createStatement();
             String sql = ("SELECT * FROM livros");
             ResultSet rs = s.executeQuery(sql);
             while(rs.next()){
@@ -218,7 +218,7 @@ public class LivrosDAO{
         Collection<Livro> livros = new ArrayList<Livro>();
         try {
             con = ConnectionFactory.getConnection();
-            Statement s = (Statement) con.createStatement();
+            Statement s = con.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM livros");
             while(rs.next()){
                 Livro temp = new Livro();
@@ -244,7 +244,7 @@ public class LivrosDAO{
         Collection<Livro> livros = new ArrayList<Livro>();
         try{
             con = ConnectionFactory.getConnection();
-            Statement s = (Statement) con.createStatement();
+            Statement s = con.createStatement();
             ResultSet rs = s.executeQuery("SELECT ID FROM livros");
             while(rs.next()){
                 Livro temp = new Livro();
@@ -265,7 +265,7 @@ public class LivrosDAO{
         Connection con;
         try {
             con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM livros WHERE ID = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM livros WHERE ID = ?");
             ps.setInt(1,ID);
 
             ResultSet rs = ps.executeQuery();
@@ -282,7 +282,7 @@ public class LivrosDAO{
         int resp = 0;
         try {
             Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM livros WHERE ID = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM livros WHERE ID = ?");
             ps.setInt(1,ID);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
@@ -299,7 +299,7 @@ public class LivrosDAO{
         ArrayList<Livro> livros = new ArrayList<>();
         try {
             Connection con = ConnectionFactory.getConnection();
-            Statement s = (Statement) con.createStatement();
+            Statement s = con.createStatement();
             String sql = ("SELECT * FROM livros WHERE ISBN LIKE '%" + isbn + "%'");
             ResultSet rs = s.executeQuery(sql);
             while(rs.next()){

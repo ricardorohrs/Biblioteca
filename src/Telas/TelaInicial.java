@@ -4,8 +4,6 @@ import DAO.UsersDAO;
 import model.Usuario;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -20,12 +18,7 @@ public class TelaInicial extends javax.swing.JFrame {
         setTitle("Biblioteca - UFSM");
         setSize(250, 300);
 
-        LOGINButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                login();
-            }
-        });
+        LOGINButton.addActionListener(e -> login());
 
         userField.addKeyListener(new KeyAdapter() {
             @Override
@@ -51,13 +44,13 @@ public class TelaInicial extends javax.swing.JFrame {
         Usuario user = u.read(userField.getText());
 
         if (userField.getText().equals(user.getLogin()) && passwordField.getText().equals(user.getSenha())) {
-            TelaUsuario telaUser = new TelaUsuario();
+            TelaUsuario telaUser = new TelaUsuario(user);
             telaUser.setLocationRelativeTo(null);
             telaUser.setVisible(true);
             telaUser.setResizable(false);
-            //telaUser.usuarioLogado(user);
+            telaUser.passaUser(user);
             //telaUser.atualizaMultas();
-        } else if (userField.getText().equals("admin")) {
+        } else if (userField.getText().equals("admin") && passwordField.getText().equals("admin")) {
             TelaAdmin telaAdmin = new TelaAdmin();
             telaAdmin.setLocationRelativeTo(null);
             telaAdmin.setVisible(true);

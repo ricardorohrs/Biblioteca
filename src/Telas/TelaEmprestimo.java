@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class TelaEmprestimo extends javax.swing.JFrame {
-    private JPanel reservas;
     private JTable table3;
     private JButton devolverButton;
     private JButton voltarButton;
@@ -41,9 +40,9 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                 emprestimo.setID_emprestimo(Integer.parseInt(String.valueOf(table3.getValueAt(table3.getSelectedRow(), 0))));
                 emprestimo = ed.readByID_emprest(emprestimo.getID_emprestimo());
 
-                if(emprestimo.getLogin().equals("")){
+                if(emprestimo.getLogin().equals(""))
                     JOptionPane.showMessageDialog(null,"ID invalido!");
-                }else{
+                else {
                     LivrosDAO ld = new LivrosDAO();
                     UsersDAO ud = new UsersDAO();
                     Usuario user = new Usuario();
@@ -67,9 +66,9 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                 emprestimo.setID_emprestimo(Integer.parseInt(String.valueOf(table3.getValueAt(table3.getSelectedRow(), 0))));
                 emprestimo = ed.readByID_emprest(emprestimo.getID_emprestimo());
 
-                if(emprestimo.getLogin().equals("")){
+                if(emprestimo.getLogin().equals(""))
                     JOptionPane.showMessageDialog(null, "Livro invalido!");
-                } else {
+                else {
                     if (user.getCargo() == 1) {
                         java.util.Date dataAtual = new java.util.Date();
                         java.sql.Date dataSqlAtual = new java.sql.Date(dataAtual.getTime());

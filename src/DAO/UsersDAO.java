@@ -10,11 +10,8 @@ import java.util.logging.Logger;
 public class UsersDAO {
 
     public void create(Usuario u){
-        Connection con;
-
         try {
-            con = ConnectionFactory.getConnection();
-
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = con.prepareStatement("INSERT INTO users (nome,login,senha,cargo,reservas,emprestimos,multa) VALUES (?,?,?,?,?,?,?)");
             ps.setString(1,u.getNome());
             ps.setString(2,u.getLogin());
@@ -54,15 +51,12 @@ public class UsersDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return usuarios;
     }
 
     public void update (Usuario u) {
-        Connection con;
-
         try {
-            con = ConnectionFactory.getConnection();
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = con.prepareStatement("UPDATE users SET login = ?, senha = ?, cargo = ?, nome = ? WHERE login = ?");
             ps.setString(1,u.getLogin());
             ps.setString(2,u.getSenha());
@@ -75,7 +69,6 @@ public class UsersDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public ArrayList<Usuario> readParteNome (String parteNome){
@@ -97,23 +90,19 @@ public class UsersDAO {
                 u.setMulta(rs.getInt("multa"));
                 usuarios.add(u);
             }
-
             rs.close();
             un.close();
             con.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return usuarios;
     }
 
     public ArrayList<Usuario> readLogin (String login){
         ArrayList<Usuario> usuarios = new ArrayList<>();
-        Usuario un = new Usuario();
-        Connection con;
         try {
-            con = ConnectionFactory.getConnection();
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps;
             ps = con.prepareStatement("SELECT * FROM users WHERE login = ?");
             ps.setString(1, login);
@@ -130,21 +119,19 @@ public class UsersDAO {
                 u.setMulta(rs.getInt("multa"));
                 usuarios.add(u);
             }
-
+            ps.close();
             rs.close();
             con.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return usuarios;
     }
 
     public Usuario read (String login){
         Usuario u = new Usuario();
-        Connection con;
         try {
-            con = ConnectionFactory.getConnection();
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps;
             ps = con.prepareStatement("SELECT * FROM users WHERE login = ?");
             ps.setString(1, login);
@@ -159,28 +146,23 @@ public class UsersDAO {
                 u.setEmprestimos(rs.getInt("emprestimos"));
                 u.setMulta(rs.getInt("multa"));
             }
-
             rs.close();
             ps.close();
             con.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return u;
     }
 
     public void delete(Usuario u){
-        Connection con;
         try {
-            con = ConnectionFactory.getConnection();
-
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = (PreparedStatement) con.prepareStatement("DELETE from users WHERE login = ?");
             ps.setString(1,u.getLogin());
             ps.execute();
             ps.close();
             con.close();
-
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -255,5 +237,4 @@ public class UsersDAO {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE,null,ex);
         }
     }
-
 }

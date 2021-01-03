@@ -4,11 +4,8 @@ import DAO.LivrosDAO;
 import model.Livro;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class TelaEditLivro extends javax.swing.JFrame {
-    private JPanel addLivros;
     private JTextField isbn;
     private JTextField autor;
     private JTextField editora;
@@ -36,24 +33,21 @@ public class TelaEditLivro extends javax.swing.JFrame {
 
         sairButton.addActionListener(e -> dispose());
 
-        atualizarLivroButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LivrosDAO ld = new LivrosDAO();
-                Livro livro = new Livro();
+        atualizarLivroButton.addActionListener(e -> {
+            LivrosDAO ld1 = new LivrosDAO();
+            Livro livro = new Livro();
 
-                livro.setID(l.getID());
-                livro.setISBN(Integer.parseInt(isbn.getText()));
-                livro.setAutor(autor.getText());
-                livro.setEdicao(Integer.parseInt(edicao.getText()));
-                livro.setEditora(editora.getText());
-                livro.setNome(nome.getText());
-                livro.setAno(Integer.parseInt(ano.getText()));
-                ld.update(livro);
-                telaAdmin.atualizaTabelaLivros();
-                JOptionPane.showMessageDialog(null, "Livro Atualizado!");
-                dispose();
-            }
+            livro.setID(l.getID());
+            livro.setISBN(Integer.parseInt(isbn.getText()));
+            livro.setAutor(autor.getText());
+            livro.setEdicao(Integer.parseInt(edicao.getText()));
+            livro.setEditora(editora.getText());
+            livro.setNome(nome.getText());
+            livro.setAno(Integer.parseInt(ano.getText()));
+            ld1.update(livro);
+            telaAdmin.atualizaTabelaLivros();
+            JOptionPane.showMessageDialog(null, "Livro Atualizado!");
+            dispose();
         });
     }
 }

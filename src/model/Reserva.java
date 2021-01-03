@@ -7,7 +7,6 @@ public class Reserva {
     private String nome;
 
     public Reserva() {
-
     }
 
     public String getLogin() {

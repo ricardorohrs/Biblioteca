@@ -4,11 +4,8 @@ import DAO.UsersDAO;
 import model.Usuario;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class TelaEditUser extends javax.swing.JFrame {
-    private JPanel addUsers;
     private JTextField nome;
     private JButton atualizarUsuárioButton;
     private JTextField login;
@@ -32,28 +29,20 @@ public class TelaEditUser extends javax.swing.JFrame {
 
         sairButton.addActionListener(e -> dispose());
 
-        atualizarUsuárioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UsersDAO ud = new UsersDAO();
-                Usuario user = new Usuario();
+        atualizarUsuárioButton.addActionListener(e -> {
+            UsersDAO ud1 = new UsersDAO();
+            Usuario user = new Usuario();
 
-                user.setNome(nome.getText());
-                user.setLogin(login.getText());
-                user.setSenha(senha.getText());
-                user.setCargo(cargo.getSelectedIndex() + 1);
-                ud.update(user);
-                telaAdmin.atualizaTabelaUsuarios();
-                JOptionPane.showMessageDialog(null, "Usuário " + user.getNome() + " Atualizado!");
-                dispose();
-            }
+            user.setNome(nome.getText());
+            user.setLogin(login.getText());
+            user.setSenha(senha.getText());
+            user.setCargo(cargo.getSelectedIndex() + 1);
+            ud1.update(user);
+            telaAdmin.atualizaTabelaUsuarios();
+            JOptionPane.showMessageDialog(null, "Usuário " + user.getNome() + " Atualizado!");
+            dispose();
         });
 
-        sairButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        sairButton.addActionListener(e -> dispose());
     }
 }

@@ -11,8 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-
-
 public class TelaAdmin extends javax.swing.JFrame {
     private JButton excluirLivroButton;
     private JButton adicionarLivroButton;
@@ -31,6 +29,7 @@ public class TelaAdmin extends javax.swing.JFrame {
     private JButton buscarLoginButton;
     private JButton buscarISBNButton;
     private JButton buscarEditoraButton;
+    private JButton verEmpréstimosButton;
 
     public TelaAdmin() {
         add(admin);
@@ -40,42 +39,14 @@ public class TelaAdmin extends javax.swing.JFrame {
         atualizaTabelaLivros();
         atualizaTabelaUsuarios();
 
-        sairButton.addActionListener(e -> {
-            dispose();
-        });
-
+        sairButton.addActionListener(e -> dispose());
+        verEmpréstimosButton.addActionListener(e -> abreTelaVerEmprestimo());
         adicionarLivroButton.addActionListener(e -> abreTelaAdicionaLivro());
         adicionarUsuárioButton.addActionListener(e -> abreTelaAdicionaUsuario());
         excluirUsuárioButton.addActionListener(e -> excluiUsuario());
         excluirLivroButton.addActionListener(e -> excluiLivros());
         editarLivroButton.addActionListener(e -> abreTelaEditaLivros());
         editarUsuárioButton.addActionListener(e -> abreTelaEditaUsuario());
-
-        buscarLivroButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DefaultTableModel modelo = new DefaultTableModel();
-                modelo.addColumn("ID");
-                modelo.addColumn("ISBN");
-                modelo.addColumn("Nome");
-                modelo.addColumn("Autor");
-                modelo.addColumn("Edição");
-                modelo.addColumn("Editora");
-                modelo.addColumn("Ano");
-                modelo.addColumn("Reservado");
-                modelo.addColumn("Emprestado");
-                LivrosDAO ld = new LivrosDAO();
-                ArrayList<Livro> livros = ld.buscarLivro(textFieldNomeLivro.getText());
-
-                if (livros.isEmpty())
-                    modelo.addRow(new String[]{"-","-","-","-","-","-","-","-","-"});
-                else {
-                    for (Livro livro : livros)
-                        modelo.addRow(new String[]{""+livro.getID(), ""+livro.getISBN(), ""+livro.getNome(), "" + livro.getAutor(), "" + livro.getEdicao(), ""+livro.getEditora(), "" + livro.getAno(), "" + livro.getReservado(), "" + livro.getEmprestado()});
-                }
-                table4.setModel(modelo);
-            }
-        });
 
         buscarUsuarioButton.addActionListener(new ActionListener() {
             @Override
@@ -122,6 +93,32 @@ public class TelaAdmin extends javax.swing.JFrame {
                     }
                 }
                 table5.setModel(listaUsers);
+            }
+        });
+
+        buscarLivroButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel modelo = new DefaultTableModel();
+                modelo.addColumn("ID");
+                modelo.addColumn("ISBN");
+                modelo.addColumn("Nome");
+                modelo.addColumn("Autor");
+                modelo.addColumn("Edição");
+                modelo.addColumn("Editora");
+                modelo.addColumn("Ano");
+                modelo.addColumn("Reservado");
+                modelo.addColumn("Emprestado");
+                LivrosDAO ld = new LivrosDAO();
+                ArrayList<Livro> livros = ld.buscarLivro(textFieldNomeLivro.getText());
+
+                if (livros.isEmpty())
+                    modelo.addRow(new String[]{"-","-","-","-","-","-","-","-","-"});
+                else {
+                    for (Livro livro : livros)
+                        modelo.addRow(new String[]{""+livro.getID(), ""+livro.getISBN(), ""+livro.getNome(), "" + livro.getAutor(), "" + livro.getEdicao(), ""+livro.getEditora(), "" + livro.getAno(), "" + livro.getReservado(), "" + livro.getEmprestado()});
+                }
+                table4.setModel(modelo);
             }
         });
 
@@ -271,5 +268,13 @@ public class TelaAdmin extends javax.swing.JFrame {
         editUser.setLocationRelativeTo(null);
         editUser.setVisible(true);
         editUser.setResizable(false);
+    }
+
+    private void abreTelaVerEmprestimo() {
+        TelaVerEmprestimo verEmprestimo = new TelaVerEmprestimo();
+        verEmprestimo.setLocationRelativeTo(null);
+        verEmprestimo.atualizaTabela();
+        verEmprestimo.setVisible(true);
+        verEmprestimo.setResizable(false);
     }
 }

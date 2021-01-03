@@ -1,7 +1,6 @@
 package model;
 
 public class Livro {
-
     private int ID;
     private int ISBN;
     private String autor;
@@ -43,11 +42,6 @@ public class Livro {
         return editora;
     }
 
-    @Override
-    public String toString() {
-        return "Livros{" + "ID=" + ID + ", autor=" + autor + ", edicao=" + edicao + ", editora=" + editora + ", nome=" + nome + ", ano=" + ano + '}';
-    }
-
     public void setEditora(String editora) {
         this.editora = editora;
     }
@@ -68,7 +62,7 @@ public class Livro {
         this.ano = ano;
     }
     
-      public int getISBN() {
+    public int getISBN() {
         return ISBN;
     }
 
@@ -90,6 +84,11 @@ public class Livro {
 
     public void setEmprestado(int emprestado) {
         this.emprestado = emprestado;
+    }
+
+    @Override
+    public String toString() {
+        return "Livros{" + "ID=" + ID + ", autor=" + autor + ", edicao=" + edicao + ", editora=" + editora + ", nome=" + nome + ", ano=" + ano + '}';
     }
 
 }

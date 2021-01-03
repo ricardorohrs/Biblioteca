@@ -15,7 +15,6 @@ public class TelaAddUsers extends javax.swing.JFrame {
     private JTextField reservas;
     private JTextField multas;
     private JComboBox comboBox1;
-    private JPanel cargo;
 
     public TelaAddUsers(TelaAdmin telaAdmin) {
         add(addUsers);

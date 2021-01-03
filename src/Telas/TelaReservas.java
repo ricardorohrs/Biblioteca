@@ -27,9 +27,7 @@ public class TelaReservas extends javax.swing.JFrame {
         setSize(550, 400);
         setTitle("Minhas Reservas - " + user.getNome() + " - UFSM ");
 
-        voltarButton.addActionListener(e -> {
-            dispose();
-        });
+        voltarButton.addActionListener(e -> dispose());
 
         cancelarReservaButton.addActionListener(e -> {
             ReservasDAO rd = new ReservasDAO();

@@ -16,7 +16,6 @@ public class EmprestimoDAO {
     public void create(Emprestimo t){
         try {
             Connection con = ConnectionFactory.getConnection();
-
             PreparedStatement ps = con.prepareStatement("INSERT INTO emprestimos (livro,usuario,nome,retirado,devolucao) VALUES (?,?,?,?,?)");
             ps.setInt(1,t.getID_livro());
             ps.setString(2,t.getLogin());
@@ -34,11 +33,9 @@ public class EmprestimoDAO {
     public void updateDevolucao (Emprestimo t, int id){
         try {
             Connection con = ConnectionFactory.getConnection();
-
             PreparedStatement ps = con.prepareStatement("UPDATE emprestimos SET devolucao = ? WHERE livro = ?");
             ps.setDate(1, t.getDevolucao());
             ps.setInt(2, id);
-            System.out.println(id);
             ps.execute();
             ps.close();
             con.close();
@@ -47,22 +44,23 @@ public class EmprestimoDAO {
         }
     }
 
-    public Emprestimo read(int id){
-        Emprestimo t = new Emprestimo();
-
-        Connection con;
+    public ArrayList<Emprestimo> buscarEmprestimoNome(String nome){
+        ArrayList<Emprestimo> emprestimos = new ArrayList<>();
         try {
-            con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * from emprestimos WHERE livro = ?");
-            ps.setInt(1, id);
+            Connection con = ConnectionFactory.getConnection();
+            PreparedStatement ps;
+            ps = con.prepareStatement("SELECT * from emprestimos WHERE nome LIKE '%" + nome + "%'");
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
+                Emprestimo t = new Emprestimo();
+                t.setID_emprestimo(rs.getInt("id_emprestimo"));
                 t.setID_livro(rs.getInt("livro"));
+                t.setNome(rs.getString("nome"));
                 t.setLogin(rs.getString("usuario"));
-                t.setID_emprestimo(rs.getInt("id_emprest"));
                 t.setDevolucao(rs.getDate("devolucao"));
                 t.setRetirado(rs.getDate("retirado"));
+                emprestimos.add(t);
             }
             rs.close();
             ps.close();
@@ -70,15 +68,13 @@ public class EmprestimoDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(EmprestimoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return t;
+        return emprestimos;
     }
 
     public Emprestimo readByID_emprest(int id){
         Emprestimo t = new Emprestimo();
-
-        Connection con;
         try {
-            con = ConnectionFactory.getConnection();
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM emprestimos WHERE id_emprestimo = ?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -100,9 +96,8 @@ public class EmprestimoDAO {
     }
 
     public void delete(Emprestimo t) {
-        Connection con;
         try {
-            con = ConnectionFactory.getConnection();
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = (PreparedStatement) con.prepareStatement("DELETE FROM emprestimos WHERE id_emprestimo = ?");
             ps.setInt(1, t.getID_emprestimo());
             ps.execute();
@@ -111,12 +106,10 @@ public class EmprestimoDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(EmprestimoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public ArrayList<Emprestimo> readAll(Usuario user){
         ArrayList<Emprestimo> emprestimos = new ArrayList<>();
-
         try {
             Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT * FROM emprestimos WHERE usuario = ?");
@@ -131,13 +124,62 @@ public class EmprestimoDAO {
                     temp.setRetirado(rs.getDate("retirado"));
                     emprestimos.add(temp);
                 }
-                rs.close();
             }
             con.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(EmprestimoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return emprestimos;
+    }
 
+    public ArrayList<Emprestimo> listarEmprestimos(){
+        ArrayList<Emprestimo> emprestimos = new ArrayList<>();
+        try {
+            Connection con = ConnectionFactory.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM emprestimos");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Emprestimo temp = new Emprestimo();
+                    temp.setID_emprestimo(rs.getInt("id_emprestimo"));
+                    temp.setID_livro(rs.getInt("livro"));
+                    temp.setNome(rs.getString("nome"));
+                    temp.setLogin(rs.getString("usuario"));
+                    temp.setDevolucao(rs.getDate("devolucao"));
+                    temp.setRetirado(rs.getDate("retirado"));
+                    emprestimos.add(temp);
+                }
+            }
+            con.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(EmprestimoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return emprestimos;
+    }
+
+    public ArrayList<Emprestimo> buscarLogin (String login){
+        ArrayList<Emprestimo> emprestimos = new ArrayList<>();
+        try {
+            Connection con = ConnectionFactory.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM emprestimos WHERE usuario = ?");
+            ps.setString(1, login);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                Emprestimo t = new Emprestimo();
+                t.setID_emprestimo(rs.getInt("id_emprestimo"));
+                t.setLogin(rs.getString("usuario"));
+                t.setID_livro(rs.getInt("livro"));
+                t.setNome(rs.getString("nome"));
+                t.setDevolucao(rs.getDate("devolucao"));
+                t.setRetirado(rs.getDate("retirado"));
+                emprestimos.add(t);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(EmprestimoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return emprestimos;
     }
 }

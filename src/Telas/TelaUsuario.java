@@ -11,8 +11,6 @@ import model.Usuario;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -139,74 +137,24 @@ public class TelaUsuario extends javax.swing.JFrame {
             }
         });
 
-        alugarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                EmprestimoDAO ed = new EmprestimoDAO();
-                Emprestimo emprestimo = new Emprestimo();
-                LivrosDAO ld = new LivrosDAO();
+        alugarButton.addActionListener(e -> {
+            EmprestimoDAO ed = new EmprestimoDAO();
+            Emprestimo emprestimo = new Emprestimo();
+            LivrosDAO ld = new LivrosDAO();
 
-                Livro livro = new Livro();
-                livro.setID(Integer.parseInt(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 0))));
+            Livro livro = new Livro();
+            livro.setID(Integer.parseInt(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 0))));
 
-                int emprestado = ld.checaEmprestimo(livro.getID());
-                int reservado = ld.checaReserva(livro.getID());
+            int emprestado = ld.checaEmprestimo(livro.getID());
+            int reservado = ld.checaReserva(livro.getID());
 
-                if (emprestado == 1)
-                    JOptionPane.showMessageDialog(null,"Esse livro já foi emprestado!");
-                else if (reservado == 1) {
-                    Reserva reserva = new Reserva();
-                    ReservasDAO rd = new ReservasDAO();
-                    reserva = rd.readByIdLivro(livro.getID());
-                    if(reserva.getLogin().equals(testeUser.getText())){
-                        UsersDAO ud = new UsersDAO();
-                        Usuario u = new Usuario();
-                        u = ud.read(testeUser.getText());
-                        if(u.getCargo() == 1){
-                            if(u.getReservas() < 3){
-                                emprestimo.setID_livro(livro.getID());
-                                emprestimo.setLogin(testeUser.getText());
-                                java.util.Date dataUtilAtual = new java.util.Date();
-                                java.sql.Date dataSqlAtual = new java.sql.Date(dataUtilAtual.getTime());
-                                emprestimo.setRetirado(dataSqlAtual);
-                                dataUtilAtual.setDate(dataUtilAtual.getDate() + 7);
-                                dataSqlAtual = new java.sql.Date(dataUtilAtual.getTime());
-                                emprestimo.setDevolucao(dataSqlAtual);
-                                emprestimo.setNome(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 2)));
-                                ed.create(emprestimo);
-                                System.out.println(user.getReservas());
-                                ud.deletaReservas(u);
-                                System.out.println(usuariologado.getReservas());
-                                ld.marcarReserva(emprestimo.getID_livro(), 0);
-                                ud.marcarEmprestimoUser(u);
-                                ld.marcarEmprestimo(livro.getID(), 1);
-                                atualizaTabela();
-                                JOptionPane.showMessageDialog(null, "Emprestimo Feito!");
-                            } else
-                                JOptionPane.showMessageDialog(null, "Limite de reservas ou empréstimos alcançado. Você precisa devolver um livro primeiro!");
-                        } else if (u.getCargo() == 2) {
-                            if (u.getReservas() < 5) {
-                                emprestimo.setID_livro(livro.getID());
-                                emprestimo.setLogin(testeUser.getText());
-                                java.util.Date dataUtilAtual = new java.util.Date();
-                                java.sql.Date dataSqlAtual = new java.sql.Date(dataUtilAtual.getTime());
-                                emprestimo.setRetirado(dataSqlAtual);
-                                dataUtilAtual.setDate(dataUtilAtual.getDate() + 15);
-                                dataSqlAtual = new java.sql.Date(dataUtilAtual.getTime());
-                                emprestimo.setDevolucao(dataSqlAtual);
-                                emprestimo.setNome(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 2)));
-                                ed.create(emprestimo);
-                                ld.marcarReserva(emprestimo.getID_livro(), 0);
-                                ud.marcarEmprestimoUser(u);
-                                ld.marcarEmprestimo(livro.getID(), 1);
-                                atualizaTabela();
-                                JOptionPane.showMessageDialog(null, "Emprestimo Feito!");
-                            } else
-                                JOptionPane.showMessageDialog(null, "Limite de reservas ou empréstimos alcançado. Você precisa devolver um livro primeiro!");
-                        }
-                    } else
-                        JOptionPane.showMessageDialog(null,"Esse livro já está reservado!");
-                }else{
+            if (emprestado == 1)
+                JOptionPane.showMessageDialog(null,"Esse livro já foi emprestado!");
+            else if (reservado == 1) {
+                Reserva reserva = new Reserva();
+                ReservasDAO rd = new ReservasDAO();
+                reserva = rd.readByIdLivro(livro.getID());
+                if(reserva.getLogin().equals(testeUser.getText())){
                     UsersDAO ud = new UsersDAO();
                     Usuario u = new Usuario();
                     u = ud.read(testeUser.getText());
@@ -222,11 +170,14 @@ public class TelaUsuario extends javax.swing.JFrame {
                             emprestimo.setDevolucao(dataSqlAtual);
                             emprestimo.setNome(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 2)));
                             ed.create(emprestimo);
+                            System.out.println(user.getReservas());
+                            ud.deletaReservas(u);
+                            System.out.println(usuariologado.getReservas());
                             ld.marcarReserva(emprestimo.getID_livro(), 0);
                             ud.marcarEmprestimoUser(u);
                             ld.marcarEmprestimo(livro.getID(), 1);
                             atualizaTabela();
-                            JOptionPane.showMessageDialog(null,"Emprestimo Feito!");
+                            JOptionPane.showMessageDialog(null, "Emprestimo Feito!");
                         } else
                             JOptionPane.showMessageDialog(null, "Limite de reservas ou empréstimos alcançado. Você precisa devolver um livro primeiro!");
                     } else if (u.getCargo() == 2) {
@@ -241,54 +192,92 @@ public class TelaUsuario extends javax.swing.JFrame {
                             emprestimo.setDevolucao(dataSqlAtual);
                             emprestimo.setNome(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 2)));
                             ed.create(emprestimo);
+                            ld.marcarReserva(emprestimo.getID_livro(), 0);
                             ud.marcarEmprestimoUser(u);
                             ld.marcarEmprestimo(livro.getID(), 1);
                             atualizaTabela();
-                            JOptionPane.showMessageDialog(null,"Emprestimo Feito!");
+                            JOptionPane.showMessageDialog(null, "Emprestimo Feito!");
                         } else
                             JOptionPane.showMessageDialog(null, "Limite de reservas ou empréstimos alcançado. Você precisa devolver um livro primeiro!");
                     }
-                }
-            }
-        });
-
-        pagarMultasButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+                } else
+                    JOptionPane.showMessageDialog(null,"Esse livro já está reservado!");
+            }else{
                 UsersDAO ud = new UsersDAO();
-                Usuario u = ud.read(usuariologado.getLogin());
-                if(u.getMulta() > 0){
-                    JOptionPane.showMessageDialog(null, "VocÃª pagou R$"+u.getMulta()+" de multas!");
-                    ud.updateMultas(u, 0 - u.getMulta());
-                }else
-                    JOptionPane.showMessageDialog(null, "Você não possui multas!");
+                Usuario u = new Usuario();
+                u = ud.read(testeUser.getText());
+                if(u.getCargo() == 1){
+                    if(u.getReservas() < 3){
+                        emprestimo.setID_livro(livro.getID());
+                        emprestimo.setLogin(testeUser.getText());
+                        java.util.Date dataUtilAtual = new java.util.Date();
+                        java.sql.Date dataSqlAtual = new java.sql.Date(dataUtilAtual.getTime());
+                        emprestimo.setRetirado(dataSqlAtual);
+                        dataUtilAtual.setDate(dataUtilAtual.getDate() + 7);
+                        dataSqlAtual = new java.sql.Date(dataUtilAtual.getTime());
+                        emprestimo.setDevolucao(dataSqlAtual);
+                        emprestimo.setNome(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 2)));
+                        ed.create(emprestimo);
+                        ld.marcarReserva(emprestimo.getID_livro(), 0);
+                        ud.marcarEmprestimoUser(u);
+                        ld.marcarEmprestimo(livro.getID(), 1);
+                        atualizaTabela();
+                        JOptionPane.showMessageDialog(null,"Emprestimo Feito!");
+                    } else
+                        JOptionPane.showMessageDialog(null, "Limite de reservas ou empréstimos alcançado. Você precisa devolver um livro primeiro!");
+                } else if (u.getCargo() == 2) {
+                    if (u.getReservas() < 5) {
+                        emprestimo.setID_livro(livro.getID());
+                        emprestimo.setLogin(testeUser.getText());
+                        java.util.Date dataUtilAtual = new java.util.Date();
+                        java.sql.Date dataSqlAtual = new java.sql.Date(dataUtilAtual.getTime());
+                        emprestimo.setRetirado(dataSqlAtual);
+                        dataUtilAtual.setDate(dataUtilAtual.getDate() + 15);
+                        dataSqlAtual = new java.sql.Date(dataUtilAtual.getTime());
+                        emprestimo.setDevolucao(dataSqlAtual);
+                        emprestimo.setNome(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 2)));
+                        ed.create(emprestimo);
+                        ud.marcarEmprestimoUser(u);
+                        ld.marcarEmprestimo(livro.getID(), 1);
+                        atualizaTabela();
+                        JOptionPane.showMessageDialog(null,"Emprestimo Feito!");
+                    } else
+                        JOptionPane.showMessageDialog(null, "Limite de reservas ou empréstimos alcançado. Você precisa devolver um livro primeiro!");
+                }
             }
         });
 
-        buscarEditoraButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DefaultTableModel modelo = new DefaultTableModel();
-                modelo.addColumn("ID");
-                modelo.addColumn("ISBN");
-                modelo.addColumn("Nome");
-                modelo.addColumn("Autor");
-                modelo.addColumn("Edição");
-                modelo.addColumn("Editora");
-                modelo.addColumn("Ano");
-                modelo.addColumn("Reservado");
-                modelo.addColumn("Emprestado");
-                LivrosDAO ld = new LivrosDAO();
-                ArrayList<Livro> livros = ld.readbyEditora(buscarEditoraTextField.getText());
+        pagarMultasButton.addActionListener(e -> {
+            UsersDAO ud = new UsersDAO();
+            Usuario u = ud.read(usuariologado.getLogin());
+            if(u.getMulta() > 0){
+                JOptionPane.showMessageDialog(null, "VocÃª pagou R$" + u.getMulta() + " de multas!");
+                ud.updateMultas(u, 0 - u.getMulta());
+            } else
+                JOptionPane.showMessageDialog(null, "Você não possui multas!");
+        });
 
-                if (livros.isEmpty())
-                    modelo.addRow(new String[]{"-","-","-","-","-","-","-","-","-"});
-                else {
-                    for (Livro livro : livros)
-                        modelo.addRow(new String[]{""+livro.getID(), ""+livro.getISBN(), ""+livro.getNome(), "" + livro.getAutor(), "" + livro.getEdicao(), ""+livro.getEditora(), "" + livro.getAno(), "" + livro.getReservado(), "" + livro.getEmprestado()});
-                }
-                table1.setModel(modelo);
+        buscarEditoraButton.addActionListener(e -> {
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("ID");
+            modelo.addColumn("ISBN");
+            modelo.addColumn("Nome");
+            modelo.addColumn("Autor");
+            modelo.addColumn("Edição");
+            modelo.addColumn("Editora");
+            modelo.addColumn("Ano");
+            modelo.addColumn("Reservado");
+            modelo.addColumn("Emprestado");
+            LivrosDAO ld = new LivrosDAO();
+            ArrayList<Livro> livros = ld.readbyEditora(buscarEditoraTextField.getText());
+
+            if (livros.isEmpty())
+                modelo.addRow(new String[]{"-","-","-","-","-","-","-","-","-"});
+            else {
+                for (Livro livro : livros)
+                    modelo.addRow(new String[]{""+livro.getID(), ""+livro.getISBN(), ""+livro.getNome(), "" + livro.getAutor(), "" + livro.getEdicao(), ""+livro.getEditora(), "" + livro.getAno(), "" + livro.getReservado(), "" + livro.getEmprestado()});
             }
+            table1.setModel(modelo);
         });
     }
 

@@ -4,17 +4,14 @@ import model.Livro;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LivrosDAO{
 
     public void create(Livro t) {
-        Connection con;
         try {
-            con = ConnectionFactory.getConnection();
-
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = (PreparedStatement) con.prepareStatement("INSERT INTO livros (ISBN,autor,edicao,editora,nome,ano,reservado,emprestado) VALUES (?,?,?,?,?,?,?,?)");
             ps.setInt(1, t.getISBN());
             ps.setString(2, t.getAutor());
@@ -32,11 +29,10 @@ public class LivrosDAO{
         }
     }
 
-    public Livro read(int id) {
-        Connection con;
+    public Livro read (int id) {
         Livro t = new Livro();
         try {
-            con = ConnectionFactory.getConnection();
+            Connection con = ConnectionFactory.getConnection();
 
             PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM livros WHERE ID = ?");
             ps.setInt(1, id);
@@ -62,11 +58,9 @@ public class LivrosDAO{
     }
 
     public Livro readbyISBN(int ISBN) {
-        Connection con;
         Livro t = new Livro();
         try {
-            con = ConnectionFactory.getConnection();
-
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM livros WHERE ISBN = ?");
             ps.setInt(1, ISBN);
             ResultSet rs = ps.executeQuery();
@@ -86,15 +80,12 @@ public class LivrosDAO{
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return t;
     }
 
     public void update(Livro t) {
-        Connection con;
         try {
-            con = ConnectionFactory.getConnection();
-
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = (PreparedStatement) con.prepareStatement("UPDATE livros SET ISBN = ?, autor = ?, edicao = ?, editora = ?, nome = ?, ano = ? WHERE ID = ?");
             ps.setInt(1, t.getISBN());
             ps.setString(2,t.getAutor());
@@ -140,10 +131,8 @@ public class LivrosDAO{
     }
 
     public void delete(Livro t) {
-        Connection con;
         try {
-            con = ConnectionFactory.getConnection();
-
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = con.prepareStatement("DELETE from livros WHERE ID = ?");
             ps.setInt(1, t.getID());
             ps.execute();
@@ -152,7 +141,6 @@ public class LivrosDAO{
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public ArrayList<Livro> readbyParteNome(String parteNome){
@@ -180,7 +168,6 @@ public class LivrosDAO{
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return livros;
     }
 
@@ -209,15 +196,13 @@ public class LivrosDAO{
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return livros;
     }
 
     public ArrayList<Livro> readAll() {
-        Connection con;
-        Collection<Livro> livros = new ArrayList<Livro>();
+        ArrayList<Livro> livros = new ArrayList<Livro>();
         try {
-            con = ConnectionFactory.getConnection();
+            Connection con = ConnectionFactory.getConnection();
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM livros");
             while(rs.next()){
@@ -236,14 +221,13 @@ public class LivrosDAO{
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return (ArrayList<Livro>) livros;
+        return livros;
     }
 
     public ArrayList<Livro> readAllID(){
-        Connection con;
-        Collection<Livro> livros = new ArrayList<Livro>();
+        ArrayList<Livro> livros = new ArrayList<Livro>();
         try{
-            con = ConnectionFactory.getConnection();
+            Connection con = ConnectionFactory.getConnection();
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery("SELECT ID FROM livros");
             while(rs.next()){
@@ -256,18 +240,15 @@ public class LivrosDAO{
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        return (ArrayList<Livro>)livros;
+        return livros;
     }
 
     public int checaEmprestimo(int ID){
         int resp = 0;
-        Connection con;
         try {
-            con = ConnectionFactory.getConnection();
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT * FROM livros WHERE ID = ?");
-            ps.setInt(1,ID);
-
+            ps.setInt(1, ID);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 resp = rs.getInt("emprestado");
@@ -291,7 +272,6 @@ public class LivrosDAO{
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return resp;
     }
 
@@ -320,7 +300,6 @@ public class LivrosDAO{
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return livros;
     }
 
@@ -349,7 +328,6 @@ public class LivrosDAO{
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return livros;
     }
 
@@ -378,7 +356,6 @@ public class LivrosDAO{
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return livros;
     }
 }

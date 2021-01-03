@@ -29,10 +29,9 @@ public class ReservasDAO {
     }
 
     public Reserva read (int ID){
-        Connection con;
         Reserva t = new Reserva();
         try {
-            con = ConnectionFactory.getConnection();
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reservas WHERE ID_reserva = ?");
             ps.setInt(1,ID);
             ResultSet rs = ps.executeQuery();
@@ -46,7 +45,6 @@ public class ReservasDAO {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ReservasDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return t;
     }
 
@@ -62,7 +60,6 @@ public class ReservasDAO {
                 t.setID_reserva(rs.getInt("ID_reserva"));
                 t.setLogin(rs.getString("login"));
                 t.setNome(rs.getString("nome"));
-
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ReservasDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -71,9 +68,8 @@ public class ReservasDAO {
     }
 
     public void delete (Reserva t){
-        Connection con;
         try {
-            con = ConnectionFactory.getConnection();
+            Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = con.prepareStatement("DELETE FROM reservas WHERE ID_reserva = ?");
             ps.setInt(1,t.getID_reserva());
             ps.execute();
@@ -86,7 +82,6 @@ public class ReservasDAO {
 
     public ArrayList<Reserva> readAll (Usuario user){
         ArrayList<Reserva> reservas = new ArrayList<>();
-
         try {
             Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reservas WHERE login = ?");

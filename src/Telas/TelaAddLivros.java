@@ -42,8 +42,6 @@ public class TelaAddLivros extends javax.swing.JFrame {
                 dispose();
             }
         });
-
         sairButton.addActionListener(e -> dispose());
     }
-
 }

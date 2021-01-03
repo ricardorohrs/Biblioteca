@@ -4,6 +4,7 @@ import DAO.EmprestimoDAO;
 import DAO.LivrosDAO;
 import DAO.UsersDAO;
 import model.Emprestimo;
+import model.Livro;
 import model.Usuario;
 
 import javax.swing.*;
@@ -63,11 +64,17 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                 EmprestimoDAO ed = new EmprestimoDAO();
                 Emprestimo emprestimo = new Emprestimo();
 
+                LivrosDAO ld = new LivrosDAO();
+                Livro livro = new Livro();
+
                 emprestimo.setID_emprestimo(Integer.parseInt(String.valueOf(table3.getValueAt(table3.getSelectedRow(), 0))));
                 emprestimo = ed.readByID_emprest(emprestimo.getID_emprestimo());
 
-                if(emprestimo.getLogin().equals(""))
-                    JOptionPane.showMessageDialog(null, "Livro invalido!");
+                int aux = (Integer.parseInt(String.valueOf(table3.getValueAt(table3.getSelectedRow(), 1))));
+                livro = ld.read(aux);
+
+                if (livro.getID() == emprestimo.getID_livro())
+                    JOptionPane.showMessageDialog(null, "Livro já está reservado por outro usuário!");
                 else {
                     if (user.getCargo() == 1) {
                         java.util.Date dataAtual = new java.util.Date();

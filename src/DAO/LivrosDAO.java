@@ -34,8 +34,9 @@ public class LivrosDAO{
         try {
             Connection con = ConnectionFactory.getConnection();
 
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM livros WHERE ID = ?");
+            PreparedStatement ps = (PreparedStatement) con.prepareStatement("SELECT * FROM livros WHERE id = ? && reservado = ?");
             ps.setInt(1, id);
+            ps.setInt(2, 1);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
@@ -190,50 +191,6 @@ public class LivrosDAO{
                 t.setEmprestado(rs.getInt("emprestado"));
                 t.setReservado(rs.getInt("reservado"));
                 livros.add(t);
-            }
-            rs.close();
-            con.close();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return livros;
-    }
-
-    public ArrayList<Livro> readAll() {
-        ArrayList<Livro> livros = new ArrayList<Livro>();
-        try {
-            Connection con = ConnectionFactory.getConnection();
-            Statement s = con.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM livros");
-            while(rs.next()){
-                Livro temp = new Livro();
-                temp.setID(rs.getInt("ID"));
-                temp.setISBN(rs.getInt("ISBN"));
-                temp.setAutor(rs.getString("autor"));
-                temp.setEdicao(rs.getInt("edicao"));
-                temp.setEditora(rs.getString("editora"));
-                temp.setNome(rs.getString("nome"));
-                temp.setAno(rs.getInt("Ano"));
-                livros.add(temp);
-            }
-            rs.close();
-            con.close();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return livros;
-    }
-
-    public ArrayList<Livro> readAllID(){
-        ArrayList<Livro> livros = new ArrayList<Livro>();
-        try{
-            Connection con = ConnectionFactory.getConnection();
-            Statement s = con.createStatement();
-            ResultSet rs = s.executeQuery("SELECT ID FROM livros");
-            while(rs.next()){
-                Livro temp = new Livro();
-                temp.setID(rs.getInt("ID"));
-                livros.add(temp);
             }
             rs.close();
             con.close();

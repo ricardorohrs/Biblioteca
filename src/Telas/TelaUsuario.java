@@ -124,12 +124,15 @@ public class TelaUsuario extends javax.swing.JFrame {
 
             if (reservado == 1)
                 JOptionPane.showMessageDialog(null,"Este livro já está reservado no momento!");
+            else if (user.getMulta() > 0)
+                JOptionPane.showMessageDialog(null, "Reserva proibida: Você tem multas pendentes!");
             else {
                 reserva.setID_livro(livro.getID());
                 reserva.setLogin(testeUser.getText());
                 reserva.setNome(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 2)));
                 rd.create(reserva);
                 ud.addReservas(usuariologado);
+                atualizaTabela();
                 ld.marcarReserva(livro.getID(), 1);
                 JOptionPane.showMessageDialog(null,"Reserva feita!");
                 atualizaTabela();
@@ -171,14 +174,16 @@ public class TelaUsuario extends javax.swing.JFrame {
                                 emprestimo.setDevolucao(dataSqlAtual);
                                 emprestimo.setNome(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 2)));
                                 ed.create(emprestimo);
+                                System.out.println(user.getReservas());
                                 ud.deletaReservas(u);
+                                System.out.println(usuariologado.getReservas());
                                 ld.marcarReserva(emprestimo.getID_livro(), 0);
                                 ud.marcarEmprestimoUser(u);
                                 ld.marcarEmprestimo(livro.getID(), 1);
                                 atualizaTabela();
                                 JOptionPane.showMessageDialog(null, "Emprestimo Feito!");
                             } else
-                                JOptionPane.showMessageDialog(null, "Limite de reservas. Você precisa devolver um livro primeiro!");
+                                JOptionPane.showMessageDialog(null, "Limite de reservas ou empréstimos alcançado. Você precisa devolver um livro primeiro!");
                         } else if (u.getCargo() == 2) {
                             if (u.getReservas() < 5) {
                                 emprestimo.setID_livro(livro.getID());
@@ -197,7 +202,7 @@ public class TelaUsuario extends javax.swing.JFrame {
                                 atualizaTabela();
                                 JOptionPane.showMessageDialog(null, "Emprestimo Feito!");
                             } else
-                                JOptionPane.showMessageDialog(null, "Limite de reservas. Você precisa devolver um livro primeiro!");
+                                JOptionPane.showMessageDialog(null, "Limite de reservas ou empréstimos alcançado. Você precisa devolver um livro primeiro!");
                         }
                     } else
                         JOptionPane.showMessageDialog(null,"Esse livro já está reservado!");
@@ -223,7 +228,7 @@ public class TelaUsuario extends javax.swing.JFrame {
                             atualizaTabela();
                             JOptionPane.showMessageDialog(null,"Emprestimo Feito!");
                         } else
-                            JOptionPane.showMessageDialog(null, "Limite de reservas. Você precisa devolver um livro primeiro!");
+                            JOptionPane.showMessageDialog(null, "Limite de reservas ou empréstimos alcançado. Você precisa devolver um livro primeiro!");
                     } else if (u.getCargo() == 2) {
                         if (u.getReservas() < 5) {
                             emprestimo.setID_livro(livro.getID());
@@ -241,7 +246,7 @@ public class TelaUsuario extends javax.swing.JFrame {
                             atualizaTabela();
                             JOptionPane.showMessageDialog(null,"Emprestimo Feito!");
                         } else
-                            JOptionPane.showMessageDialog(null, "Limite de reservas. Você precisa devolver um livro primeiro!");
+                            JOptionPane.showMessageDialog(null, "Limite de reservas ou empréstimos alcançado. Você precisa devolver um livro primeiro!");
                     }
                 }
             }

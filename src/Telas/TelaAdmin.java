@@ -28,6 +28,9 @@ public class TelaAdmin extends javax.swing.JFrame {
     private JButton buscarUsuarioButton;
     private JTextField textFieldNomeLivro;
     private JTextField textFieldNomeUser;
+    private JButton buscarLoginButton;
+    private JButton buscarISBNButton;
+    private JButton buscarEditoraButton;
 
     public TelaAdmin() {
         add(admin);
@@ -95,6 +98,82 @@ public class TelaAdmin extends javax.swing.JFrame {
                     }
                 }
                 table5.setModel(listaUsers);
+            }
+        });
+
+        buscarLoginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel listaUsers = new DefaultTableModel();
+                listaUsers.addColumn("login");
+                listaUsers.addColumn("nome");
+                listaUsers.addColumn("cargo");
+                listaUsers.addColumn("reservas");
+                listaUsers.addColumn("emprestimo");
+                listaUsers.addColumn("multa");
+                UsersDAO ud = new UsersDAO();
+                ArrayList<Usuario> usuarios = ud.readLogin(textFieldNomeUser.getText());
+
+                if (usuarios.isEmpty())
+                    listaUsers.addRow(new String[]{"-", "-", "-", "-", "-", "-"});
+                else {
+                    for (Usuario users: usuarios) {
+                        listaUsers.addRow(new String[]{""+users.getLogin(),""+users.getNome(),""+users.getCargo(),""+users.getReservas(),""+users.getEmprestimos(),""+users.getMulta()});
+                    }
+                }
+                table5.setModel(listaUsers);
+            }
+        });
+
+        buscarISBNButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel modelo = new DefaultTableModel();
+                modelo.addColumn("ID");
+                modelo.addColumn("ISBN");
+                modelo.addColumn("Nome");
+                modelo.addColumn("Autor");
+                modelo.addColumn("Edição");
+                modelo.addColumn("Editora");
+                modelo.addColumn("Ano");
+                modelo.addColumn("Reservado");
+                modelo.addColumn("Emprestado");
+                LivrosDAO ld = new LivrosDAO();
+                ArrayList<Livro> livros = ld.readbyISBN(textFieldNomeLivro.getText());
+
+                if (livros.isEmpty())
+                    modelo.addRow(new String[]{"-","-","-","-","-","-","-","-","-"});
+                else {
+                    for (Livro livro : livros)
+                        modelo.addRow(new String[]{""+livro.getID(), ""+livro.getISBN(), ""+livro.getNome(), "" + livro.getAutor(), "" + livro.getEdicao(), ""+livro.getEditora(), "" + livro.getAno(), "" + livro.getReservado(), "" + livro.getEmprestado()});
+                }
+                table4.setModel(modelo);
+            }
+        });
+
+        buscarEditoraButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel modelo = new DefaultTableModel();
+                modelo.addColumn("ID");
+                modelo.addColumn("ISBN");
+                modelo.addColumn("Nome");
+                modelo.addColumn("Autor");
+                modelo.addColumn("Edição");
+                modelo.addColumn("Editora");
+                modelo.addColumn("Ano");
+                modelo.addColumn("Reservado");
+                modelo.addColumn("Emprestado");
+                LivrosDAO ld = new LivrosDAO();
+                ArrayList<Livro> livros = ld.readbyEditora(textFieldNomeLivro.getText());
+
+                if (livros.isEmpty())
+                    modelo.addRow(new String[]{"-","-","-","-","-","-","-","-","-"});
+                else {
+                    for (Livro livro : livros)
+                        modelo.addRow(new String[]{""+livro.getID(), ""+livro.getISBN(), ""+livro.getNome(), "" + livro.getAutor(), "" + livro.getEdicao(), ""+livro.getEditora(), "" + livro.getAno(), "" + livro.getReservado(), "" + livro.getEmprestado()});
+                }
+                table4.setModel(modelo);
             }
         });
     }

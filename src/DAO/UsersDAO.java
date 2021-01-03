@@ -58,7 +58,7 @@ public class UsersDAO {
         return usuarios;
     }
 
-    public void update(Usuario u) {
+    public void update (Usuario u) {
         Connection con;
 
         try {
@@ -86,7 +86,6 @@ public class UsersDAO {
             String sql = ("SELECT * FROM users WHERE nome LIKE '%" + parteNome + "%'");
             ResultSet rs = un.executeQuery(sql);
 
-
             while(rs.next()){
                 Usuario u = new Usuario();
                 u.setLogin(rs.getString("login"));
@@ -101,6 +100,38 @@ public class UsersDAO {
 
             rs.close();
             un.close();
+            con.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return usuarios;
+    }
+
+    public ArrayList<Usuario> readLogin (String login){
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        Usuario un = new Usuario();
+        Connection con;
+        try {
+            con = ConnectionFactory.getConnection();
+            PreparedStatement ps;
+            ps = con.prepareStatement("SELECT * FROM users WHERE login = ?");
+            ps.setString(1, login);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                Usuario u = new Usuario();
+                u.setLogin(rs.getString("login"));
+                u.setSenha(rs.getString("senha"));
+                u.setCargo(rs.getInt("cargo"));
+                u.setNome(rs.getString("nome"));
+                u.setReservas(rs.getInt("reservas"));
+                u.setEmprestimos(rs.getInt("emprestimos"));
+                u.setMulta(rs.getInt("multa"));
+                usuarios.add(u);
+            }
+
+            rs.close();
             con.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -200,7 +231,7 @@ public class UsersDAO {
     public void desmarcarEmprestimoUser(Usuario u){
         try {
             Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("UPDATE users SET emprestimos = ? WHERE login = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET emprestimos = ? WHERE login = ?");
             ps.setInt(1, u.getEmprestimos() - 1);
             ps.setString(2, u.getLogin());
             ps.execute();

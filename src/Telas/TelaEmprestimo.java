@@ -68,7 +68,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                 emprestimo = ed.readByID_emprest(emprestimo.getID_emprestimo());
 
                 if(emprestimo.getLogin().equals("")){
-                    JOptionPane.showMessageDialog(null, "ID invalido!");
+                    JOptionPane.showMessageDialog(null, "Livro invalido!");
                 } else {
                     if (user.getCargo() == 1) {
                         java.util.Date dataAtual = new java.util.Date();

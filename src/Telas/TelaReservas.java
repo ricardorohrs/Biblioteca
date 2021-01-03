@@ -47,7 +47,6 @@ public class TelaReservas extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null,"Reserva cancelada!");
                 atualizaTabela();
                 telaUsuario.atualizaTabela();
-                System.out.println(usuariologado.getReservas());
             }
         });
     }

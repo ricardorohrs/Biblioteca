@@ -14,17 +14,6 @@ public class Livro {
 
     public Livro() {
     }
-
-    public Livro(int ID, int ISBN, String autor, int edicao, String editora, String nome, int ano, int reservado) {
-        this.ID = ID;
-        this.ISBN = ISBN;
-        this.autor = autor;
-        this.edicao = edicao;
-        this.editora = editora;
-        this.nome = nome;
-        this.ano = ano;
-        this.reservado = reservado;
-    }
     
     public int getID() {
         return ID;

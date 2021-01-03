@@ -115,8 +115,8 @@ public class LivrosDAO{
         try {
             Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = (PreparedStatement) con.prepareStatement("UPDATE livros SET emprestado = ? WHERE ID = ?");
-            ps.setInt(1,res);
-            ps.setInt(2,ID);
+            ps.setInt(1, res);
+            ps.setInt(2, ID);
             ps.execute();
             ps.close();
             con.close();
@@ -301,6 +301,64 @@ public class LivrosDAO{
             Connection con = ConnectionFactory.getConnection();
             Statement s = con.createStatement();
             String sql = ("SELECT * FROM livros WHERE ISBN LIKE '%" + isbn + "%'");
+            ResultSet rs = s.executeQuery(sql);
+            while(rs.next()){
+                Livro t = new Livro();
+                t.setID(rs.getInt("ID"));
+                t.setISBN(rs.getInt("ISBN"));
+                t.setAutor(rs.getString("autor"));
+                t.setEdicao(rs.getInt("edicao"));
+                t.setEditora(rs.getString("editora"));
+                t.setNome(rs.getString("nome"));
+                t.setAno(rs.getInt("ano"));
+                t.setEmprestado(rs.getInt("emprestado"));
+                t.setReservado(rs.getInt("reservado"));
+                livros.add(t);
+            }
+            rs.close();
+            con.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return livros;
+    }
+
+    public ArrayList<Livro> buscarLivro (String parteNome){
+        ArrayList<Livro> livros = new ArrayList<>();
+        try {
+            Connection con = ConnectionFactory.getConnection();
+            Statement s = con.createStatement();
+            String sql = ("SELECT * FROM livros WHERE nome LIKE '%" + parteNome + "%'");
+            ResultSet rs = s.executeQuery(sql);
+            while(rs.next()){
+                Livro t = new Livro();
+                t.setID(rs.getInt("ID"));
+                t.setISBN(rs.getInt("ISBN"));
+                t.setAutor(rs.getString("autor"));
+                t.setEdicao(rs.getInt("edicao"));
+                t.setEditora(rs.getString("editora"));
+                t.setNome(rs.getString("nome"));
+                t.setAno(rs.getInt("ano"));
+                t.setEmprestado(rs.getInt("emprestado"));
+                t.setReservado(rs.getInt("reservado"));
+                livros.add(t);
+            }
+            rs.close();
+            con.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return livros;
+    }
+
+    public ArrayList<Livro> readbyEditora(String parteNome){
+        ArrayList<Livro> livros = new ArrayList<>();
+        try {
+            Connection con = ConnectionFactory.getConnection();
+            Statement s = con.createStatement();
+            String sql = ("SELECT * FROM livros WHERE editora LIKE '%" + parteNome + "%'");
             ResultSet rs = s.executeQuery(sql);
             while(rs.next()){
                 Livro t = new Livro();

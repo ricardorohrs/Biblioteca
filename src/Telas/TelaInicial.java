@@ -49,7 +49,7 @@ public class TelaInicial extends javax.swing.JFrame {
             telaUser.setVisible(true);
             telaUser.setResizable(false);
             telaUser.passaUser(user);
-            //telaUser.atualizaMultas();
+            telaUser.atualizaMultas();
         } else if (userField.getText().equals("admin") && passwordField.getText().equals("admin")) {
             TelaAdmin telaAdmin = new TelaAdmin();
             telaAdmin.setLocationRelativeTo(null);

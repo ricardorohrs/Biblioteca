@@ -3,19 +3,16 @@ package model;
 import java.sql.Date;
 
 public class Emprestimo {
+    private int ID_emprestimo;
     private int ID_livro;
     private String login;
-    private int IDEmprestimo;
+    private String nome;
     private Date retirado;
     private Date devolucao;
-    
-    public Emprestimo() {
-    }
 
-    public Emprestimo(int ID_livro, String login) {
-        this.ID_livro = ID_livro;
-        this.login = login;
-    }   
+    public Emprestimo() {
+
+    }
 
     public int getID_livro() {
         return ID_livro;
@@ -33,12 +30,20 @@ public class Emprestimo {
         this.login = login;
     }
 
-    public int getIDEmprestimo() {
-        return IDEmprestimo;
+    public String getNome() {
+        return nome;
     }
 
-    public void setIDEmprestimo(int IDEmprestimo) {
-        this.IDEmprestimo = IDEmprestimo;
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getID_emprestimo() {
+        return ID_emprestimo;
+    }
+
+    public void setID_emprestimo(int ID_emprestimo) {
+        this.ID_emprestimo = ID_emprestimo;
     }
 
     public Date getRetirado() {
@@ -49,12 +54,11 @@ public class Emprestimo {
         this.retirado = retirado;
     }
 
-    public Date getDevolucao() {
-        return devolucao;
-    }
-
     public void setDevolucao(Date devolucao) {
         this.devolucao = devolucao;
     }
-        
+
+    public Date getDevolucao() {
+        return devolucao;
+    }
 }

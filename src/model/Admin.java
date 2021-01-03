@@ -1,6 +1,6 @@
 package model;
 
-public class    Admin {
+public class Admin {
     private int login;
     private String senha;
 

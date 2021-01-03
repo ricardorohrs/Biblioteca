@@ -6,13 +6,6 @@ public class Reserva {
     private int ID_reserva;
     private String nome;
 
-    public Reserva(String login, int ID_livro, int ID_reserva, String nome) {
-        this.login = login;
-        this.ID_livro = ID_livro;
-        this.ID_reserva = ID_reserva;
-        this.nome = nome;
-    }
-
     public Reserva() {
 
     }
@@ -48,11 +41,4 @@ public class Reserva {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    @Override
-    public String toString() {
-        return "Reservas {" + "login=" + login + ", ID_livro=" + ID_livro + ", ID_reserva=" + ID_reserva + ", nome=" + nome +"}";
-    }
-    
-    
 }

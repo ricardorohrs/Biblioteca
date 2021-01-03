@@ -7,6 +7,8 @@ import model.Usuario;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 
@@ -22,6 +24,10 @@ public class TelaAdmin extends javax.swing.JFrame {
     private JTable table5;
     private JPanel admin;
     private JButton sairButton;
+    private JButton buscarLivroButton;
+    private JButton buscarUsuarioButton;
+    private JTextField textFieldNomeLivro;
+    private JTextField textFieldNomeUser;
 
     public TelaAdmin() {
         add(admin);
@@ -42,6 +48,55 @@ public class TelaAdmin extends javax.swing.JFrame {
         editarLivroButton.addActionListener(e -> abreTelaEditaLivros());
         editarUsuárioButton.addActionListener(e -> abreTelaEditaUsuario());
 
+        buscarLivroButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel modelo = new DefaultTableModel();
+                modelo.addColumn("ID");
+                modelo.addColumn("ISBN");
+                modelo.addColumn("Nome");
+                modelo.addColumn("Autor");
+                modelo.addColumn("Edição");
+                modelo.addColumn("Editora");
+                modelo.addColumn("Ano");
+                modelo.addColumn("Reservado");
+                modelo.addColumn("Emprestado");
+                LivrosDAO ld = new LivrosDAO();
+                ArrayList<Livro> livros = ld.buscarLivro(textFieldNomeLivro.getText());
+
+                if (livros.isEmpty())
+                    modelo.addRow(new String[]{"-","-","-","-","-","-","-","-","-"});
+                else {
+                    for (Livro livro : livros)
+                        modelo.addRow(new String[]{""+livro.getID(), ""+livro.getISBN(), ""+livro.getNome(), "" + livro.getAutor(), "" + livro.getEdicao(), ""+livro.getEditora(), "" + livro.getAno(), "" + livro.getReservado(), "" + livro.getEmprestado()});
+                }
+                table4.setModel(modelo);
+            }
+        });
+
+        buscarUsuarioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel listaUsers = new DefaultTableModel();
+                listaUsers.addColumn("login");
+                listaUsers.addColumn("nome");
+                listaUsers.addColumn("cargo");
+                listaUsers.addColumn("reservas");
+                listaUsers.addColumn("emprestimo");
+                listaUsers.addColumn("multa");
+                UsersDAO ud = new UsersDAO();
+                ArrayList<Usuario> usuarios = ud.readParteNome(textFieldNomeUser.getText());
+
+                if (usuarios.isEmpty())
+                    listaUsers.addRow(new String[]{"-", "-", "-", "-", "-", "-"});
+                else {
+                    for (Usuario users: usuarios) {
+                        listaUsers.addRow(new String[]{""+users.getLogin(),""+users.getNome(),""+users.getCargo(),""+users.getReservas(),""+users.getEmprestimos(),""+users.getMulta()});
+                    }
+                }
+                table5.setModel(listaUsers);
+            }
+        });
     }
 
     public void atualizaTabelaUsuarios() {
@@ -50,17 +105,17 @@ public class TelaAdmin extends javax.swing.JFrame {
         listaUsers.addColumn("nome");
         listaUsers.addColumn("cargo");
         listaUsers.addColumn("reservas");
+        listaUsers.addColumn("emprestimo");
         listaUsers.addColumn("multa");
         ArrayList<Usuario> usuarios;
         UsersDAO ud = new UsersDAO();
         usuarios = ud.listarUsers();
 
-
         if (usuarios.isEmpty())
-            listaUsers.addRow(new String[]{"-", "-", "-", "-", "-"});
+            listaUsers.addRow(new String[]{"-", "-", "-", "-", "-", "-"});
         else {
             for (Usuario users: usuarios) {
-                listaUsers.addRow(new String[]{""+users.getLogin(),""+users.getNome(),""+users.getCargo(),""+users.getReservas(),""+users.getMulta()});
+                listaUsers.addRow(new String[]{""+users.getLogin(),""+users.getNome(),""+users.getCargo(),""+users.getReservas(),""+users.getEmprestimos(),""+users.getMulta()});
             }
         }
         table5.setModel(listaUsers);

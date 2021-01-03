@@ -5,17 +5,9 @@ public class Usuario {
     private String login;
     private String senha;
     private int reservas;
+    private int emprestimos;
     private int cargo;
     private int multa;
-
-    public Usuario(String nome, String login, String senha, int cargo, int reservas, int multa) {
-        this.nome = nome;
-        this.login = login;
-        this.senha = senha;
-        this.cargo = cargo;
-        this.reservas = reservas;
-        this.multa = multa;
-    }
 
     public Usuario() {
 
@@ -53,6 +45,14 @@ public class Usuario {
         this.reservas = reservas;
     }
 
+    public void setEmprestimos(int emprestimos) {
+        this.emprestimos = emprestimos;
+    }
+
+    public int getEmprestimos() {
+        return emprestimos;
+    }
+
     public int getCargo() {
         return cargo;
     }
@@ -68,5 +68,4 @@ public class Usuario {
     public void setMulta(int multa) {
         this.multa = multa;
     }
-    
 }

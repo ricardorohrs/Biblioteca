@@ -4,7 +4,6 @@ import model.Usuario;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,13 +15,14 @@ public class UsersDAO {
         try {
             con = ConnectionFactory.getConnection();
 
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("INSERT INTO users (nome,login,senha,cargo,reservas,multa) VALUES (?,?,?,?,?,?)");
+            PreparedStatement ps = con.prepareStatement("INSERT INTO users (nome,login,senha,cargo,reservas,emprestimos,multa) VALUES (?,?,?,?,?,?,?)");
             ps.setString(1,u.getNome());
             ps.setString(2,u.getLogin());
             ps.setString(3,u.getSenha());
             ps.setInt(4,u.getCargo());
             ps.setInt(5, u.getReservas());
-            ps.setInt(6, u.getMulta());
+            ps.setInt(6, u.getEmprestimos());
+            ps.setInt(7, u.getMulta());
             ps.execute();
             ps.close();
             con.close();
@@ -35,7 +35,7 @@ public class UsersDAO {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         try {
             Connection con = ConnectionFactory.getConnection();
-            Statement s = (Statement) con.createStatement();
+            Statement s = con.createStatement();
             String sql = ("SELECT * FROM users");
             ResultSet rs = s.executeQuery(sql);
             while(rs.next()){
@@ -45,6 +45,7 @@ public class UsersDAO {
                 u.setCargo(rs.getInt("cargo"));
                 u.setNome(rs.getString("nome"));
                 u.setReservas(rs.getInt("reservas"));
+                u.setEmprestimos(rs.getInt("emprestimos"));
                 u.setMulta(rs.getInt("multa"));
                 usuarios.add(u);
             }
@@ -62,7 +63,7 @@ public class UsersDAO {
 
         try {
             con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("UPDATE users SET login = ?, senha = ?, cargo = ?, nome = ? WHERE login = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET login = ?, senha = ?, cargo = ?, nome = ? WHERE login = ?");
             ps.setString(1,u.getLogin());
             ps.setString(2,u.getSenha());
             ps.setInt(3,u.getCargo());
@@ -77,8 +78,38 @@ public class UsersDAO {
 
     }
 
-    public Usuario read (String login){
+    public ArrayList<Usuario> readParteNome (String parteNome){
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        try {
+            Connection con = ConnectionFactory.getConnection();
+            Statement un = con.createStatement();
+            String sql = ("SELECT * FROM users WHERE nome LIKE '%" + parteNome + "%'");
+            ResultSet rs = un.executeQuery(sql);
 
+
+            while(rs.next()){
+                Usuario u = new Usuario();
+                u.setLogin(rs.getString("login"));
+                u.setSenha(rs.getString("senha"));
+                u.setCargo(rs.getInt("cargo"));
+                u.setNome(rs.getString("nome"));
+                u.setReservas(rs.getInt("reservas"));
+                u.setEmprestimos(rs.getInt("emprestimos"));
+                u.setMulta(rs.getInt("multa"));
+                usuarios.add(u);
+            }
+
+            rs.close();
+            un.close();
+            con.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return usuarios;
+    }
+
+    public Usuario read (String login){
         Usuario u = new Usuario();
         Connection con;
         try {
@@ -94,6 +125,7 @@ public class UsersDAO {
                 u.setCargo(rs.getInt("cargo"));
                 u.setNome(rs.getString("nome"));
                 u.setReservas(rs.getInt("reservas"));
+                u.setEmprestimos(rs.getInt("emprestimos"));
                 u.setMulta(rs.getInt("multa"));
             }
 
@@ -123,31 +155,6 @@ public class UsersDAO {
         }
     }
 
-
-    public ArrayList<Usuario> readAll(){
-        Connection con;
-        Collection<Usuario> usuarios = new ArrayList<>();
-        try {
-            con = ConnectionFactory.getConnection();
-            Statement s = (Statement) con.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM users");
-            while(rs.next()){
-                Usuario temp = new Usuario();
-                temp.setLogin(rs.getString("login"));
-                temp.setNome(rs.getString("nome"));
-                temp.setCargo(rs.getInt("cargo"));
-                temp.setReservas(rs.getInt("reservas"));
-                usuarios.add(temp);
-            }
-            rs.close();
-            con.close();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return (ArrayList<Usuario>) usuarios;
-
-    }
-
     public void addReservas(Usuario u){
         try {
             Connection con = ConnectionFactory.getConnection();
@@ -173,6 +180,34 @@ public class UsersDAO {
             con.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(UsersDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void marcarEmprestimoUser(Usuario u){
+        try {
+            Connection con = ConnectionFactory.getConnection();
+            PreparedStatement ps = (PreparedStatement) con.prepareStatement("UPDATE users SET emprestimos = ? WHERE login = ?");
+            ps.setInt(1, u.getEmprestimos() + 1);
+            ps.setString(2, u.getLogin());
+            ps.execute();
+            ps.close();
+            con.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void desmarcarEmprestimoUser(Usuario u){
+        try {
+            Connection con = ConnectionFactory.getConnection();
+            PreparedStatement ps = (PreparedStatement) con.prepareStatement("UPDATE users SET emprestimos = ? WHERE login = ?");
+            ps.setInt(1, u.getEmprestimos() - 1);
+            ps.setString(2, u.getLogin());
+            ps.execute();
+            ps.close();
+            con.close();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(LivrosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

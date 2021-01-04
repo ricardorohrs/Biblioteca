@@ -36,15 +36,16 @@ public class TelaUsuario extends javax.swing.JFrame {
 
     public void passaUser (Usuario user){
         usuariologado = user;
-        testeUser.setText(String.valueOf(usuariologado.getLogin()));
+        multaField.setText(usuariologado.getMulta() +",00");
     }
 
     public TelaUsuario(Usuario user) {
+
         add(acervo);
         setSize(950, 450);
         setTitle("Busca Acervo - " + user.getNome() + " - UFSM ");
 
-        multaField.setText(String.valueOf(user.getMulta()));
+        testeUser.setText(String.valueOf(user.getLogin()));
 
         buscarButton.addActionListener(e -> {
             DefaultTableModel modelo = new DefaultTableModel();
@@ -71,7 +72,7 @@ public class TelaUsuario extends javax.swing.JFrame {
 
         minhasReservasButton.addActionListener(e -> {
             TelaReservas telaReserva = new TelaReservas(this, user);
-            telaReserva.passaUser(usuariologado);
+            telaReserva.passaUser(user);
             telaReserva.atualizaTabela();
             telaReserva.setLocationRelativeTo(null);
             telaReserva.setVisible(true);
@@ -80,7 +81,7 @@ public class TelaUsuario extends javax.swing.JFrame {
 
         meusEmprestimos.addActionListener(e -> {
             TelaEmprestimo telaEmprestimo = new TelaEmprestimo(this, user);
-            telaEmprestimo.passaUser(usuariologado);
+            telaEmprestimo.passaUser(user);
             telaEmprestimo.atualizaTabela();
             telaEmprestimo.setLocationRelativeTo(null);
             telaEmprestimo.setVisible(true);
@@ -122,7 +123,7 @@ public class TelaUsuario extends javax.swing.JFrame {
             int reservado = ld.checaReserva(livro.getID());
 
             if (reservado == 1)
-                JOptionPane.showMessageDialog(null,"Este livro já está reservado no momento!");
+                JOptionPane.showMessageDialog(null, "Este livro já está reservado no momento!");
             else if (user.getMulta() > 0)
                 JOptionPane.showMessageDialog(null, "Reserva proibida: Você tem multas pendentes!");
             else {
@@ -130,11 +131,10 @@ public class TelaUsuario extends javax.swing.JFrame {
                 reserva.setLogin(testeUser.getText());
                 reserva.setNome(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 2)));
                 rd.create(reserva);
-                ud.addReservas(usuariologado);
-                atualizaTabela();
+                ud.addReservas(user);
                 ld.marcarReserva(livro.getID(), 1);
-                JOptionPane.showMessageDialog(null,"Reserva feita!");
                 atualizaTabela();
+                JOptionPane.showMessageDialog(null,"Reserva feita!");
             }
         });
 
@@ -174,9 +174,7 @@ public class TelaUsuario extends javax.swing.JFrame {
                                 emprestimo.setDevolucao(dataSqlAtual);
                                 emprestimo.setNome(String.valueOf(table1.getValueAt(table1.getSelectedRow(), 2)));
                                 ed.create(emprestimo);
-                                System.out.println(user.getReservas());
                                 ud.deletaReservas(u);
-                                System.out.println(usuariologado.getReservas());
                                 ld.marcarReserva(emprestimo.getID_livro(), 0);
                                 ud.marcarEmprestimoUser(u);
                                 ld.marcarEmprestimo(livro.getID(), 1);
@@ -268,8 +266,8 @@ public class TelaUsuario extends javax.swing.JFrame {
             UsersDAO ud = new UsersDAO();
             Usuario u = ud.read(usuariologado.getLogin());
             if(u.getMulta() > 0){
-                JOptionPane.showMessageDialog(null, "VocÃª pagou R$" + u.getMulta() + ",00 de multas!");
-                ud.updateMultas(u, 0 - u.getMulta());
+                JOptionPane.showMessageDialog(null, "Voce pagou R$" + u.getMulta() + ",00 de multas!");
+                ud.updateMultas(u, 0);
             } else
                 JOptionPane.showMessageDialog(null, "Você não possui multas!");
         });
@@ -332,9 +330,10 @@ public class TelaUsuario extends javax.swing.JFrame {
             LocalDate atual = LocalDate.now();
             LocalDate devolucao = dataDevolucao.toLocalDate();
             long diferencaemdias = ChronoUnit.DAYS.between(devolucao,atual);
+            System.out.println(usuariologado.getEmprestimos());
             if(diferencaemdias > 0){
                 UsersDAO ud = new UsersDAO();
-                ud.updateMultas(usuariologado, (int)diferencaemdias);
+                ud.updateMultas(usuariologado, (usuariologado.getEmprestimos()*(int)diferencaemdias));
             }
         }
     }

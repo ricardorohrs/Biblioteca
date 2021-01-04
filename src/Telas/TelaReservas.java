@@ -26,7 +26,6 @@ public class TelaReservas extends javax.swing.JFrame {
         add(reservas);
         setSize(550, 400);
         setTitle("Minhas Reservas - " + user.getNome() + " - UFSM ");
-
         voltarButton.addActionListener(e -> dispose());
 
         cancelarReservaButton.addActionListener(e -> {
@@ -37,17 +36,13 @@ public class TelaReservas extends javax.swing.JFrame {
             livro.setID(Integer.parseInt(String.valueOf(table2.getValueAt(table2.getSelectedRow(), 0))));
             reserva = rd.read(livro.getID());
 
-            if(reserva.getLogin() == null)
-                JOptionPane.showMessageDialog(null,"ID invalido!");
-            else {
-                LivrosDAO ld = new LivrosDAO();
-                ld.marcarReserva(reserva.getID_livro(), 0);
-                rd.delete(reserva);
-                ud.deletaReservas(usuariologado);
-                JOptionPane.showMessageDialog(null,"Reserva cancelada!");
-                atualizaTabela();
-                telaUsuario.atualizaTabela();
-            }
+            LivrosDAO ld = new LivrosDAO();
+            ld.marcarReserva(reserva.getID_livro(), 0);
+            rd.delete(reserva);
+            ud.deletaReservas(user);
+            JOptionPane.showMessageDialog(null,"Reserva cancelada!");
+            atualizaTabela();
+            telaUsuario.atualizaTabela();
         });
     }
 

@@ -158,7 +158,7 @@ public class UsersDAO {
     public void delete(Usuario u){
         try {
             Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("DELETE from users WHERE login = ?");
+            PreparedStatement ps = con.prepareStatement("DELETE from users WHERE login = ?");
             ps.setString(1,u.getLogin());
             ps.execute();
             ps.close();
@@ -171,9 +171,8 @@ public class UsersDAO {
     public void addReservas(Usuario u){
         try {
             Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = con.prepareStatement("UPDATE users SET reservas = ? WHERE login = ?");
-            ps.setInt(1, u.getReservas() + 1);
-            ps.setString(2, u.getLogin());
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET reservas = reservas+1 WHERE login = ?");
+            ps.setString(1, u.getLogin());
             ps.execute();
             ps.close();
             con.close();
@@ -185,9 +184,8 @@ public class UsersDAO {
     public void deletaReservas(Usuario u){
         try {
             Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = con.prepareStatement("UPDATE users SET reservas = ? WHERE login = ?");
-            ps.setInt(1, u.getReservas() - 1);
-            ps.setString(2, u.getLogin());
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET reservas = reservas-1 WHERE login = ?");
+            ps.setString(1, u.getLogin());
             ps.execute();
             ps.close();
             con.close();
@@ -199,9 +197,8 @@ public class UsersDAO {
     public void marcarEmprestimoUser(Usuario u){
         try {
             Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = (PreparedStatement) con.prepareStatement("UPDATE users SET emprestimos = ? WHERE login = ?");
-            ps.setInt(1, u.getEmprestimos() + 1);
-            ps.setString(2, u.getLogin());
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET emprestimos = emprestimos+1 WHERE login = ?");
+            ps.setString(1, u.getLogin());
             ps.execute();
             ps.close();
             con.close();
@@ -213,9 +210,8 @@ public class UsersDAO {
     public void desmarcarEmprestimoUser(Usuario u){
         try {
             Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = con.prepareStatement("UPDATE users SET emprestimos = ? WHERE login = ?");
-            ps.setInt(1, u.getEmprestimos() - 1);
-            ps.setString(2, u.getLogin());
+            PreparedStatement ps = con.prepareStatement("UPDATE users SET emprestimos = emprestimos-1 WHERE login = ?");
+            ps.setString(1, u.getLogin());
             ps.execute();
             ps.close();
             con.close();
@@ -228,7 +224,7 @@ public class UsersDAO {
         try{
             Connection con = ConnectionFactory.getConnection();
             PreparedStatement ps = con.prepareStatement("UPDATE users SET multa = ? WHERE login = ?");
-            ps.setInt(1, u.getMulta() + multa);
+            ps.setInt(1, multa);
             ps.setString(2, u.getLogin());
             ps.execute();
             ps.close();
